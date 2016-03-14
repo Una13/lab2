@@ -120,8 +120,19 @@ architecture rtl of top is
     S           : in  std_ulogic := 'L'
   );
   end component;
+ 
+------- direct_mode_logic ----------------------------------------
+
+component direct_mode_logic    
+    Port ( dir_pixel_column_i : in  STD_LOGIC_VECTOR (10 downto 0);
+           dir_pixel_row_i : in  STD_LOGIC_VECTOR (10 downto 0);
+           dir_red_o : out  STD_LOGIC_VECTOR (7 downto 0);
+           dir_blue_o : out  STD_LOGIC_VECTOR (7 downto 0);
+           dir_green_o : out  STD_LOGIC_VECTOR (7 downto 0));
+
+end component;
   
-  
+--------------------------------------------------------------------
   constant update_period     : std_logic_vector(31 downto 0) := conv_std_logic_vector(1, 32);
   
   constant GRAPH_MEM_ADDR_WIDTH : natural := MEM_ADDR_WIDTH + 6;-- graphics addres is scales with minumum char size 8*8 log2(64) = 6
@@ -245,6 +256,17 @@ begin
     green_o            => green_o,
     blue_o             => blue_o     
   );
+ 
+--------------------------------------------------- 
+   direct_mode_logic_i: direct_mode_logic
+	   port map (
+				dir_pixel_column_i => dir_pixel_column,
+				dir_pixel_row_i => dir_pixel_row,
+				dir_red_o => dir_red,
+				dir_blue_o => dir_blue,
+				dir_green_o => dir_green
+				);
+-----------------------------------------------------
   
   -- na osnovu signala iz vga_top modula dir_pixel_column i dir_pixel_row realizovati logiku koja genereise
   --dir_red
